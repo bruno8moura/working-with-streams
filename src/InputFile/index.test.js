@@ -15,11 +15,17 @@ describe('InputFile', function() {
 
     it('should delete file', async () => {
         const fileName = `big.file-${Date.now()}`
-        const expected = false
+        const expected = {
+            fileCreated: true,
+            fileDeleted: false
+        }
+        
         const inputFile = new InputFile(fileName)
-        await inputFile.create()
+        
+        await inputFile.create()        
+        chai.assert((await inputFile.exists()) === expected.fileCreated)
+        
         await inputFile.delete()
-
-        chai.assert((await inputFile.exists()) === expected)
+        chai.assert((await inputFile.exists()) === expected.fileDeleted)
     })
 })
