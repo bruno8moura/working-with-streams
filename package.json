@@ -4,7 +4,8 @@
   "description": "## starting project 1. npm init -y 2. gitignore 3. standardize commits",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha src/**/*.test.js",
+    "test:watch": "npm test -- -w"
   },
   "keywords": [],
   "author": "",
