@@ -1,5 +1,5 @@
 const crypto = require('crypto')
-const { writeFile, readFile } = require('fs/promises')
+const { writeFile, readFile, rm } = require('fs/promises')
 class InputFile {
     constructor(name) {
         this.name = name
@@ -10,9 +10,18 @@ class InputFile {
     }
 
     async exists() {
-        const file = await readFile(this.name)
+        try {
+            const file = await readFile(this.name)    
+            return undefined !== file            
+        } catch (error) {
+            //log here
+        }
 
-        return undefined !== file
+        return false
+    }
+
+    async delete() {
+        await rm(this.name)
     }
 }
 
