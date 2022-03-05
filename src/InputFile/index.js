@@ -47,8 +47,7 @@ class InputFile {
         try {
             return (await this.length()) > 0
         } catch (error) {
-            //log here
-            console.log(error)
+            //log here            
         }
 
         return false
