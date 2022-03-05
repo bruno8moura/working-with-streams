@@ -12,4 +12,12 @@ describe('InputFile', function() {
 
         chai.assert((await inputFile.exists()) === expected)
     })
+
+    it('should delete file', async () => {
+        const expected = false
+        const inputFile = new InputFile(fileName)
+        await inputFile.delete()
+
+        chai.assert((await inputFile.exists()) === expected)
+    })
 })
