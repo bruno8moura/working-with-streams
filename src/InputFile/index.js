@@ -5,37 +5,40 @@ const fs = require('fs')
 const { promisify } = require('util')
 const { Readable, pipeline } = require('stream')
 const pipelineAsync = promisify(pipeline)
+const NUMBER = require('../constants/NUMBER')
 class InputFile {
-    constructor(name) {
+    constructor( { folder, name } ) {
         this.name = name
-        this.size = BigInt(0)
+        this.folder = folder
+        this.size = NUMBER.ZERO_BIGINT
+        this.filePath = `${this.folder}/${this.name}`
     }
 
-    async create() {
+    async create(content='') {
+        const buff = Buffer.from( content, 'utf-8')
+        await this.#write(buff)  
+    }
+
+    async #write( content ){
         const readableStream = Readable({
             read(){
                 const finished = null
-                const oneGb = 1e9
-                const threeGb = [ oneGb, oneGb, oneGb ]
-
-                for (let i = 0; i < threeGb.length; i++) {
-                    const data = crypto.randomBytes(threeGb[i])
-                    this.push(data)
+                if(content.length > NUMBER.ZERO_BIGINT){
+                    this.push(content)
                 }
-
                 this.push(finished)
             }
         })
 
         await pipelineAsync(
             readableStream,
-            fs.createWriteStream(this.name)
+            fs.createWriteStream(this.filePath)
         )
     }
 
     async length() {
         return new Promise( ( resolve, reject ) => {
-            fs.createReadStream(this.name).on('data', (chunk) => {
+            fs.createReadStream(this.filePath).on('data', (chunk) => {
                 this.size = this.size + BigInt(chunk.length)
             })
             .on('end', () => resolve(this.size))
@@ -45,7 +48,7 @@ class InputFile {
 
     async exists() {
         try {
-            return (await this.length()) > 0
+            return fs.existsSync(this.filePath)
         } catch (error) {
             //log here            
         }
@@ -54,7 +57,7 @@ class InputFile {
     }
 
     async delete() {
-        await rm(this.name)
+        await rm(this.filePath)
     }
 }
 
