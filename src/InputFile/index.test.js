@@ -19,8 +19,30 @@ describe('InputFile', function() {
         chai.assert((await inputFile.exists()) === expected.file.created)
     })
 
+    it('should create a file with content', async () => {
+        const fileName = `filewithcontent-${Date.now()}`
+        const expected = {
+            file: {
+                created: true                
+            }
+        }
+
+        const createContent = (flush) => () => {
+            for (let index = 0; index < 1e5; index++) {
+                const person = { id: Date.now() + index, name: `Bruno-${index}`}
+                const data = JSON.stringify(person)
+                flush(data)
+            }
+        }
+
+        const inputFile = new InputFile({folder, name: fileName})
+        await inputFile.create(createContent)
+
+        chai.assert((await inputFile.exists()) === expected.file.created)
+    })
+
     it('should delete file', async () => {
-        const fileName = `big.file-${Date.now()}`
+        const fileName = `must-be-deleted-${Date.now()}`
         const expected = {
             fileCreated: true,
             fileDeleted: true
@@ -28,7 +50,7 @@ describe('InputFile', function() {
         
         const inputFile = new InputFile( { folder, name: fileName } )
         
-        await inputFile.create()        
+        await inputFile.create()
         chai.assert((await inputFile.exists()) === expected.fileCreated)
         
         await inputFile.delete()
