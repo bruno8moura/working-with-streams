@@ -14,18 +14,21 @@ class InputFile {
         this.filePath = `${this.folder}/${this.name}`
     }
 
-    async create(content='') {
-        const buff = Buffer.from( content, 'utf-8')
-        await this.#write(buff)  
+    async create(createContent) {
+        // const buff = Buffer.from( content, 'utf-8')
+        await this.#write(createContent)  
     }
 
-    async #write( content ){
+    async #write( createContent ){
         const readableStream = Readable({
             read(){
-                const finished = null
-                if(content.length > NUMBER.ZERO_BIGINT){
-                    this.push(content)
+                const flush = (data) => this.push(data, 'utf-8')
+                if(createContent){
+                    const writeContent = createContent(flush)  
+                    writeContent()
                 }
+                
+                const finished = null
                 this.push(finished)
             }
         })
