@@ -39,27 +39,19 @@ class File {
     }
 
     async length() {
-        return new Promise( ( resolve, reject ) => {
-            fs.createReadStream(this.filePath).on('data', (chunk) => {
-                this.size = this.size + BigInt(chunk.length)
-            })
-            .on('end', () => resolve(this.size))
-            .on('error', (e) => {
-                resolve(undefined)
-                // implements logs here
-                // console.error(e)
-            })
-        })
+        try {
+            const {size} = fs.statSync(this.filePath)
+            return size            
+        } catch (error) {
+            // implement logs
+        }
+
+        const fileNotExists = undefined
+        return fileNotExists
     }
 
     async exists() {
-        try {
-            return fs.existsSync(this.filePath)
-        } catch (error) {
-            //log here            
-        }
-
-        return false
+        return fs.existsSync(this.filePath)
     }
 
     async delete() {
