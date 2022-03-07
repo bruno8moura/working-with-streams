@@ -57,4 +57,13 @@ describe('File', function () {
         await file.delete()
         chai.assert((!await file.exists()) === expected.fileDeleted)
     })
+
+    it("should return undefined when there isn't a file", async () => {
+        const fileName = `file-not-exists-${Date.now()}`
+
+        const file = new File({ folder, name: fileName })
+        
+        chai.expect((await file.length())).to.be.deep.equal(undefined)
+        
+    })
 })
