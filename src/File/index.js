@@ -22,10 +22,9 @@ class File {
     async #write( createContent ){
         const readableStream = Readable({
             read(){
-                const flush = (data) => this.push(data, 'utf-8')
+                const flush = (data) => this.push(JSON.stringify(data), 'utf-8')
                 if(createContent){
-                    const writeContent = createContent(flush)  
-                    writeContent()
+                    createContent(flush)                    
                 }
                 
                 const finished = null
