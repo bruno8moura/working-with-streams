@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha src/**/*.test.js",
     "test:watch": "npm test -- -w",
-    "test:coverage": "nyc npm test"
+    "test:coverage": "nyc --reporter=html --reporter=text npm test"
   },
   "keywords": [],
   "author": "",
