@@ -66,4 +66,13 @@ describe('File', function () {
         chai.expect((await file.length())).to.be.deep.equal(undefined)
         
     })
+
+    it("should return 'false' when file not exists", async () => {
+        const fileName = `file-not-exists-${Date.now()}`
+        const expected = false
+        const file = new File({ folder, name: fileName })
+        
+        chai.expect((await file.exists())).to.be.deep.equal(expected)
+        
+    })
 })
