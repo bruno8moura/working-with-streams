@@ -44,7 +44,11 @@ class File {
                 this.size = this.size + BigInt(chunk.length)
             })
             .on('end', () => resolve(this.size))
-            .on('error', (e) => reject(e))            
+            .on('error', (e) => {
+                resolve(undefined)
+                // implements logs here
+                // console.error(e)
+            })
         })
     }
 
