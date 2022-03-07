@@ -6,7 +6,7 @@ const { promisify } = require('util')
 const { Readable, pipeline } = require('stream')
 const pipelineAsync = promisify(pipeline)
 const NUMBER = require('../constants/NUMBER')
-class InputFile {
+class File {
     constructor( { folder, name } ) {
         this.name = name
         this.folder = folder
@@ -64,4 +64,4 @@ class InputFile {
     }
 }
 
-module.exports=InputFile
+module.exports=File

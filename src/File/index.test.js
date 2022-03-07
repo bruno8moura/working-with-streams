@@ -1,8 +1,8 @@
 const chai = require('chai')
-const InputFile = require('../InputFile')
+const File = require('../File')
 
 const folder = 'temp'
-describe('InputFile', function() {
+describe('File', function() {
     this.timeout(Infinity)
         
     it('should create empty file', async () => {
@@ -13,10 +13,10 @@ describe('InputFile', function() {
             }
         }
 
-        const inputFile = new InputFile({folder, name: fileName})
-        await inputFile.create()
+        const file = new File({folder, name: fileName})
+        await file.create()
 
-        chai.assert((await inputFile.exists()) === expected.file.created)
+        chai.assert((await file.exists()) === expected.file.created)
     })
 
     it('should create a file with content', async () => {
@@ -35,10 +35,10 @@ describe('InputFile', function() {
             }
         }
 
-        const inputFile = new InputFile({folder, name: fileName})
-        await inputFile.create(createContent)
+        const file = new File({folder, name: fileName})
+        await file.create(createContent)
 
-        chai.assert((await inputFile.exists()) === expected.file.created)
+        chai.assert((await file.exists()) === expected.file.created)
     })
 
     it('should delete file', async () => {
@@ -48,12 +48,12 @@ describe('InputFile', function() {
             fileDeleted: true
         }
         
-        const inputFile = new InputFile( { folder, name: fileName } )
+        const file = new File( { folder, name: fileName } )
         
-        await inputFile.create()
-        chai.assert((await inputFile.exists()) === expected.fileCreated)
+        await file.create()
+        chai.assert((await file.exists()) === expected.fileCreated)
         
-        await inputFile.delete()
-        chai.assert((!await inputFile.exists()) === expected.fileDeleted)
+        await file.delete()
+        chai.assert((!await file.exists()) === expected.fileDeleted)
     })
 })
