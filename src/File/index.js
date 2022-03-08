@@ -23,13 +23,13 @@ class File {
         const fileExtension = this.extension
         const readableStream = Readable({
             read(){
-                const flush = (data) => { 
-                    const content = fileExtension === BINARY ? data : JSON.stringify(data)
-                    const encoding = fileExtension === BINARY ? undefined : 'utf-8'
-                    this.push(content, encoding)
-                }
-
                 if(streamContent){
+                    const flush = (data) => { 
+                        const content = fileExtension === BINARY ? data : JSON.stringify(data)
+                        const encoding = fileExtension === BINARY ? undefined : 'utf-8'
+                        this.push(content, encoding)
+                    }
+
                     streamContent(flush)                    
                 }
                 
