@@ -5,14 +5,14 @@ const { promisify } = require('util')
 const { Readable, pipeline } = require('stream')
 const pipelineAsync = promisify(pipeline)
 const NUMBER = require('../constants/NUMBER')
-const { BINARY } = require('./fileType')
+const { BINARY } = require('./contentType')
 class File {
-    constructor( { folder, name, extension=BINARY } ) {
+    constructor( { folder, name, contentType=BINARY } ) {
         this.name = name
         this.folder = folder
         this.size = NUMBER.ZERO_BIGINT
         this.filePath = `${this.folder}/${this.name}`
-        this.extension = extension
+        this.contentType = contentType
     }
 
     async create(streamContent) {
@@ -20,13 +20,13 @@ class File {
     }
 
     async #write( streamContent ){
-        const fileExtension = this.extension
+        const fileContent = this.contentType
         const readableStream = Readable({
             read(){
                 if(streamContent){
                     const flush = (data) => { 
-                        const content = fileExtension === BINARY ? data : JSON.stringify(data)
-                        const encoding = fileExtension === BINARY ? undefined : 'utf-8'
+                        const content = fileContent === BINARY ? data : JSON.stringify(data)
+                        const encoding = fileContent === BINARY ? undefined : 'utf-8'
                         this.push(content, encoding)
                     }
 

@@ -1,6 +1,6 @@
 const chai = require('chai')
 const File = require('../File')
-const fileType = require('./fileType')
+const contentType = require('./contentType')
 const flushContent = require('./flushContent')
 const crypto = require('crypto')
 
@@ -39,7 +39,7 @@ describe('File', function () {
             }
         )
 
-        const file = new File({ folder, name: fileName, extension: fileType.JSON })
+        const file = new File({ folder, name: fileName, contentType: contentType.JSON })
         await file.create(streamContent)
 
         chai.assert((await file.exists()) === expected.file.created)
