@@ -1,4 +1,3 @@
-const crypto = require('crypto')
 const { rm } = require('fs/promises')
 const fs = require('fs')
 
@@ -17,7 +16,6 @@ class File {
     }
 
     async create(createContent) {
-        // const buff = Buffer.from( content, 'utf-8')
         await this.#write(createContent)  
     }
 
@@ -25,10 +23,6 @@ class File {
         const fileExtension = this.extension
         const readableStream = Readable({
             read(){
-                // when is not a buffer
-                //const flush = (data) => this.push(JSON.stringify(data), 'utf-8')
-                
-                // when is a buffer                
                 const flush = (data) => { 
                     const content = fileExtension === BINARY ? data : JSON.stringify(data)
                     const encoding = fileExtension === BINARY ? undefined : 'utf-8'
