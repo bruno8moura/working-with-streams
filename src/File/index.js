@@ -15,11 +15,11 @@ class File {
         this.extension = extension
     }
 
-    async create(createContent) {
-        await this.#write(createContent)  
+    async create(streamContent) {
+        await this.#write(streamContent)  
     }
 
-    async #write( createContent ){
+    async #write( streamContent ){
         const fileExtension = this.extension
         const readableStream = Readable({
             read(){
@@ -29,8 +29,8 @@ class File {
                     this.push(content, encoding)
                 }
 
-                if(createContent){
-                    createContent(flush)                    
+                if(streamContent){
+                    streamContent(flush)                    
                 }
                 
                 const finished = null
