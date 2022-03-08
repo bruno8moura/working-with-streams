@@ -1,7 +1,7 @@
 const chai = require('chai')
 const File = require('../File')
 const fileType = require('./fileType')
-const createStreamContent = require('./createStreamContent')
+const flushContent = require('./flushContent')
 const crypto = require('crypto')
 
 const folder = 'temp'
@@ -30,7 +30,7 @@ describe('File', function () {
             }
         }
 
-        const streamContent = createStreamContent(
+        const streamContent = flushContent(
             flush => {
                 for (let index = 0; index < 1e5; index++) {
                     const person = { id: Date.now() + index, name: `Bruno-${index}` }
@@ -81,7 +81,7 @@ describe('File', function () {
     it("should return file size when there is a very large file", async () => {
         const fileName = `big-file-${Date.now()}`
 
-        const streamContent = createStreamContent(
+        const streamContent = flushContent(
             flush => {
                 for (let index = 0; index < 3; index++) {
                     const _1gb_data = crypto.randomBytes(1e9)
