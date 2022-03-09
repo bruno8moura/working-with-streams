@@ -66,8 +66,9 @@ class File {
     }
 
     async append(streamContent) {
-        const append = await this.exists() ? true : false
-        await this.#write(streamContent, append)
+
+        if(!(await this.exists())) return { error: new Error('File not exists!') }
+        await this.#write(streamContent, true)
     }
 }
 
