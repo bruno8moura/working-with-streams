@@ -96,4 +96,42 @@ describe('File', function () {
 
         chai.expect((await file.length())).to.be.deep.equal(3000000000)
     })
+
+    it("should append data into an existing file", async () => {
+        const fileName = `append-data-${Date.now()}`
+        const expected = {
+            fileCreated: true,
+            firstContent: {
+                name: 'Bruno'
+            },
+            secondContent: {
+                name: 'Daniela'
+            }
+        }
+
+        const streamContent1 = flushContent(
+            flush => {
+                const data = expected.firstContent
+                flush(data)
+            }
+        )
+
+        const sut = new File({ folder, name: fileName, contentType: contentType.JSON})
+        await sut.create(streamContent1)
+
+        const lenghtBeforeCustom = await sut.length()
+        chai.expect((await sut.exists())).to.be.deep.equal(expected.fileCreated)
+
+        const streamContent2 = flushContent(
+            flush => {
+                const data = expected.secondContent
+                flush(data)
+            }
+        )
+        await sut.append(streamContent2)
+        chai.expect((await sut.exists())).to.be.deep.equal(expected.fileCreated)
+
+        const lenghtAfterCustom = await sut.length()
+        chai.expect(lenghtAfterCustom).to.be.greaterThan(lenghtBeforeCustom)
+    })
 })
