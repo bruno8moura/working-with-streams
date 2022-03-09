@@ -134,4 +134,29 @@ describe('File', function () {
         const lenghtAfterCustom = await sut.length()
         chai.expect(lenghtAfterCustom).to.be.greaterThan(lenghtBeforeCustom)
     })
+
+    it("should not append data when file not exists", async () => {
+        const fileName = `append-data-${Date.now()}`
+        const expected = {
+            fileCreated: false,
+            appendContent: {
+                name: 'Daniela'
+            },
+            result: { error: new Error('File not exists!') }
+        }
+
+        const sut = new File({ folder, name: fileName, contentType: contentType.JSON})
+        
+        const streamContent = flushContent(
+            flush => {
+                const data = expected.appendContent
+                flush(data)
+            }
+        )
+
+        const result = await sut.append(streamContent)
+
+        chai.expect(result).to.have.all.keys(expected.result)
+        chai.expect(JSON.stringify(result)).to.deep.equal(JSON.stringify(expected.result))       
+    })
 })
