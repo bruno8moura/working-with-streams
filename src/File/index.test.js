@@ -3,10 +3,33 @@ const File = require('../File')
 const contentType = require('./contentType')
 const flushContent = require('./flushContent')
 const crypto = require('crypto')
+const { rm } = require('fs/promises')
+const { readdirSync } = require('fs')
 
 const folder = 'temp'
+
+const deleteGeneratedFiles = async () => {
+    const allFiles = readdirSync(folder)
+        const filesPaths = allFiles
+            .filter(fileName => fileName !== '.gitkeep')
+            .map(fileName => folder.concat('/').concat(fileName))
+
+        for (const path of filesPaths) {
+            try {
+                await rm(`${path}`)
+            } catch (e) {
+                console.log('File not deleted: ', path);
+                console.error('Error: ', e);
+            }
+        }
+}
+
 describe('File', function () {
     this.timeout(Infinity)
+
+    this.afterAll(async () => {
+        await deleteGeneratedFiles()
+    })
 
     it('should create empty file', async () => {
         const fileName = `emptyfile-${Date.now()}`
@@ -43,6 +66,7 @@ describe('File', function () {
         await file.create(streamContent)
 
         chai.assert((await file.exists()) === expected.file.created)
+
     })
 
     it('should delete file', async () => {
@@ -67,7 +91,6 @@ describe('File', function () {
         const file = new File({ folder, name: fileName })
 
         chai.expect((await file.length())).to.be.deep.equal(undefined)
-
     })
 
     it("should return 'false' when file not exists", async () => {
@@ -95,10 +118,12 @@ describe('File', function () {
         await file.create(streamContent)
 
         chai.expect((await file.length())).to.be.deep.equal(3000000000)
+
     })
 
     it("should append data into an existing file", async () => {
         const fileName = `append-data-${Date.now()}`
+
         const expected = {
             fileCreated: true,
             firstContent: {
@@ -116,7 +141,7 @@ describe('File', function () {
             }
         )
 
-        const sut = new File({ folder, name: fileName, contentType: contentType.JSON})
+        const sut = new File({ folder, name: fileName, contentType: contentType.JSON })
         await sut.create(streamContent1)
 
         const lenghtBeforeCustom = await sut.length()
@@ -133,6 +158,7 @@ describe('File', function () {
 
         const lenghtAfterCustom = await sut.length()
         chai.expect(lenghtAfterCustom).to.be.greaterThan(lenghtBeforeCustom)
+
     })
 
     it("should not append data when file not exists", async () => {
@@ -145,8 +171,8 @@ describe('File', function () {
             result: { error: new Error('File not exists!') }
         }
 
-        const sut = new File({ folder, name: fileName, contentType: contentType.JSON})
-        
+        const sut = new File({ folder, name: fileName, contentType: contentType.JSON })
+
         const streamContent = flushContent(
             flush => {
                 const data = expected.appendContent
@@ -157,6 +183,6 @@ describe('File', function () {
         const result = await sut.append(streamContent)
 
         chai.expect(result).to.have.all.keys(expected.result)
-        chai.expect(JSON.stringify(result)).to.deep.equal(JSON.stringify(expected.result))       
+        chai.expect(JSON.stringify(result)).to.deep.equal(JSON.stringify(expected.result))
     })
 })
