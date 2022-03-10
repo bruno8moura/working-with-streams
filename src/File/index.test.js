@@ -1,7 +1,7 @@
 const chai = require('chai')
 const File = require('../File')
 const contentType = require('../ContentType')
-const flushContent = require('./flushContent')
+const flushContent = require('../FlushContent')
 const crypto = require('crypto')
 const { rm } = require('fs/promises')
 const { readdirSync } = require('fs')
