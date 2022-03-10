@@ -7,4 +7,10 @@ describe('FlushContent', function(){
         chai.expect(sut).to.throw('fn is not a function')
     }) 
 
+    it('should return an error when "flush" parameter is undefined', () => {
+        const fn = flush => flush
+        const flushData = sut(fn)
+
+        chai.expect(flushData).to.throw("'flush' param cannot be undefined")
+    })
 })
