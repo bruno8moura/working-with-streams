@@ -5,7 +5,7 @@ const { promisify } = require('util')
 const { Readable, pipeline } = require('stream')
 const pipelineAsync = promisify(pipeline)
 const NUMBER = require('../constants/NUMBER')
-const { BINARY } = require('./contentType')
+const { BINARY } = require('../ContentType')
 class File {
     constructor({ folder, name, contentType = BINARY }) {
         this.name = name
