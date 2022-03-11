@@ -17,12 +17,23 @@ describe('FlushContent', function(){
         chai.expect(flushData).to.throw("'flush' param cannot be undefined")
     })
 
-    it.only('should ensure "fn" is being called', () => {
+    it('should ensure "fn" is being called', () => {
         const fn = chai.spy( x => x() )
         const flushData = sut(fn)
 
         flushData( () => ({a:1}) )
 
         chai.expect(fn).to.have.been.called()
+    })
+
+
+    it('should ensure "fn" is being called with correct param', () => {
+        const fn = chai.spy( x => x() )
+        const flushData = sut(fn)
+
+        const flush = () => ({a:1})
+        flushData( flush )
+
+        chai.expect(fn).to.have.been.called.once.with.exactly(flush)
     })
 })
