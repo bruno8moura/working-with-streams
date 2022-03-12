@@ -11,4 +11,9 @@ describe.only('Numbers', function() {
         const expected = 'json'
         chai.assert(sut.JSON === expected)
     })
+
+    it('should ensure constant TEXT has value "txt"', () => {
+        const expected = 'txt'
+        chai.assert(sut.TEXT === expected)
+    })
 })
