@@ -4,7 +4,7 @@ const { describe, it } = require('mocha')
 const chai = require('chai')
 
 
-describe.only('Numbers', function() {
+describe('ContentType', function() {
     this.timeout(Infinity)
 
     it('should ensure constant JSON has value "json"', () => {
@@ -15,5 +15,10 @@ describe.only('Numbers', function() {
     it('should ensure constant TEXT has value "txt"', () => {
         const expected = 'txt'
         chai.assert(sut.TEXT === expected)
+    })
+
+    it('should ensure constant BINARY has value "binary"', () => {
+        const expected = 'binary'
+        chai.assert(sut.BINARY === expected)
     })
 })
