@@ -25,7 +25,6 @@ const deleteGeneratedFiles = async () => {
 }
 
 describe('File', function () {
-    this.timeout(Infinity)
 
     this.afterAll(async () => {
         await deleteGeneratedFiles()
