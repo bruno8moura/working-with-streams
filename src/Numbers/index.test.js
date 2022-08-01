@@ -5,8 +5,6 @@ const chai = require('chai')
 
 
 describe('Numbers', function() {
-    this.timeout(Infinity)
-
     it('should ensure constant ZERO_BIGINT has value BigInt(0)', () => {
         chai.assert(sut.ZERO_BIGINT === BigInt(0))
     })
